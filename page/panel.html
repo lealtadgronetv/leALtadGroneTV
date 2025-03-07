@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Gestión</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <h1>Panel de Gestión</h1>
+
+    <h2>Cuentas Completas</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Correo</th>
+                <th>Perfiles</th>
+                <th>Vencimiento</th>
+                <th>Plataforma</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaCuentas">
+            <!-- Se llenará dinámicamente con JS -->
+        </tbody>
+    </table>
+
+    <h2>Perfiles Vendidos</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Perfil</th>
+                <th>PIN</th>
+                <th>Cuenta Asociada</th>
+                <th>Contraseña</th>
+                <th>Vencimiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaPerfiles">
+            <!-- Se llenará dinámicamente con JS -->
+        </tbody>
+    </table>
+
+    <script src="../js/panel.js"></script>
+</body>
+
+</html>

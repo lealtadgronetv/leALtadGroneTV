@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Cuenta Completa</title>
+</head>
+<body>
+    <h1>Registro de Cuenta Completa</h1>
+
+    <form id="cuentaCompletaForm">
+        <label for="correo">Correo de la cuenta:</label>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="cantidad_perfiles">Cantidad de perfiles:</label>
+        <input type="number" id="cantidad_perfiles" name="cantidad_perfiles" min="1" required><br><br>
+
+        <label for="fecha_vencimiento">Fecha de vencimiento:</label>
+        <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" required><br><br>
+
+        <label for="plataforma">Plataforma:</label>
+        <select id="plataforma" name="plataforma" required>
+            <option value="Netflix">Netflix</option>
+            <option value="Disney+">Disney+</option>
+            <option value="HBO Max">HBO Max</option>
+            <option value="Prime Video">Prime Video</option>
+        </select><br><br>
+
+        <button type="submit">Registrar</button>
+    </form>
+
+    <br>
+    <button onclick="window.location.href='ventas.html'">Volver</button>
+
+    <script src="../js/cuentas.js"></script>
+</body>
+</html>
