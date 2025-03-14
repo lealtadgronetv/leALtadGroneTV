@@ -3,548 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streaming Demo</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <title>Ejemplo de Página con Anuncios</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000;
-            color: white;
             margin: 0;
             padding: 0;
+            background-color: #f5f5f5;
         }
         .container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .content-wrapper {
-            display: flex;
-            flex: 1;
-        }
-        .main-content {
-            flex: 1;
-            padding: 10px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .banner {
-            background-color: #333;
-            text-align: center;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .banner-text {
-            color: #999;
-        }
-        .top-banner {
-            height: 90px;
-            width: 100%;
-        }
-        .bottom-banner {
-            height: 90px;
-            width: 100%;
-        }
-        .mobile-bottom-banner {
-            height: 90px;
-            width: 100%;
-            margin-top: 20px;
-            display: none;
-        }
-        .side-banner {
-            width: 160px;
-            display: none;
-        }
-        .side-banner-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .side-banner-item {
-            background-color: #333;
-            height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        header {
-            background-color: #111;
-            padding: 10px;
-            text-align: center;
-        }
-        h1 {
-            margin: 0;
-            color: #f1c40f;
-        }
-        .tabs {
-            display: flex;
-            background-color: #222;
-            border-radius: 5px 5px 0 0;
-        }
-        .tab-button {
-            background-color: inherit;
-            border: none;
-            cursor: pointer;
-            padding: 10px 15px;
-            font-size: 16px;
-            color: white;
-            flex-grow: 1;
-        }
-        .tab-button:hover {
-            background-color: #333;
-        }
-        .tab-button.active {
-            background-color: #f1c40f;
-            color: #000;
-        }
-        .tab-content {
-            display: none;
-            padding: 15px;
-            background-color: #111;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .contenido-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 10px;
-        }
-        .item {
-            background-color: #222;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-        }
-        .item:hover {
-            background-color: #333;
-        }
-        .item h3 {
-            margin-top: 0;
-            color: #f1c40f;
-        }
-        .info {
-            color: #999;
-            font-size: 14px;
-        }
-        video {
-            width: 100%;
-            display: none;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .submenu {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            overflow-x: auto;
-        }
-        .submenu-item {
-            padding: 5px 10px;
-            background-color: #333;
-            border-radius: 5px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .submenu-item:hover, .submenu-item.active {
-            background-color: #f1c40f;
-            color: #000;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 100;
-        }
-        .modal-content {
-            background-color: #111;
-            margin: 10% auto;
-            padding: 20px;
             width: 80%;
-            max-width: 600px;
-            border-radius: 5px;
-        }
-        .episodio {
-            padding: 8px;
-            background-color: #222;
-            margin: 5px 0;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .episodio:hover {
-            background-color: #333;
-        }
-        .ad-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 200;
-        }
-        .ad-modal-content {
-            background-color: #111;
-            margin: 10% auto;
+            margin: auto;
+            background: white;
             padding: 20px;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 5px;
-            position: relative;
         }
-        .ad-close {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
+        .header-ad {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .ad-container {
-            height: 250px;
-            background-color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .close {
-            color: #aaa;
+        .sidebar {
+            width: 30%;
             float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
+            background: #eee;
+            padding: 10px;
         }
-        
-        /* Estilos responsivos */
-        @media (min-width: 1024px) {
-            .side-banner {
-                display: block;
-            }
-            .mobile-bottom-banner {
-                display: none;
-            }
+        .content {
+            width: 65%;
+            float: left;
         }
-        
-        @media (max-width: 1023px) {
-            .mobile-bottom-banner {
-                display: flex;
-            }
+        .footer {
+            clear: both;
+            text-align: center;
+            padding: 20px;
+            background: #ddd;
+            margin-top: 20px;
+        }
+        .sticky-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
+
+    <!-- 📌 Anuncio Principal (Encabezado) -->
+    <div class="header-ad">
+        <p>Anuncio (728x90) - Banner Superior</p>
+        <!-- Anuncio aquí -->
+    </div>
+
     <div class="container">
-        <!-- Banner superior -->
-        <div class="banner top-banner">
-            <span class="banner-text">BANNER PUBLICITARIO SUPERIOR</span>
+        <div class="content">
+            <h1>Título del Artículo</h1>
+            <p>Este es un ejemplo de contenido optimizado para anuncios.</p>
+
+            <!-- 📌 Anuncio Dentro del Contenido -->
+            <p style="text-align:center; background:#f8f8f8; padding:10px;">Anuncio (300x250) - Dentro del Contenido</p>
+            <!-- Anuncio aquí -->
+
+            <p>Texto del artículo con información útil para atraer tráfico y aumentar el tiempo de permanencia.</p>
+
+            <!-- 📌 Otro Anuncio Dentro del Contenido -->
+            <p style="text-align:center; background:#f8f8f8; padding:10px;">Anuncio (336x280) - Mitad del Contenido</p>
+            <!-- Anuncio aquí -->
+
+            <p>Más texto para mejorar la experiencia del usuario.</p>
         </div>
-        
-        <div class="content-wrapper">
-            <!-- Banner lateral izquierdo -->
-            <div class="side-banner">
-                <div class="side-banner-container">
-                    <div class="side-banner-item">
-                        <span class="banner-text">BANNER LATERAL 1</span>
-                    </div>
-                    <div class="side-banner-item">
-                        <span class="banner-text">BANNER LATERAL 2</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Contenido principal -->
-            <div class="main-content">
-                <header>
-                    <h1>Streaming Demo</h1>
-                </header>
-                
-                <!-- Banner debajo del título -->
-                <div class="banner bottom-banner">
-                    <span class="banner-text">BANNER PUBLICITARIO DEBAJO DEL TÍTULO</span>
-                </div>
-                
-                <div class="tabs">
-                    <button class="tab-button active" onclick="openTab('deportes')">Deportes</button>
-                    <button class="tab-button" onclick="openTab('peliculas')">Películas</button>
-                    <button class="tab-button" onclick="openTab('series')">Series</button>
-                    <button class="tab-button" onclick="openTab('animes')">Animes</button>
-                </div>
-                
-                <div id="deportes" class="tab-content active">
-                    <div class="contenido-grid">
-                        <div class="item" onclick="cargarVideo(this, 'URL_STREAM_1')">
-                            <h3>Liga Campeones: Cavalier vs Inter Miami</h3>
-                            <div class="info">19:30</div>
-                            <video controls></video>
-                        </div>
-                        <div class="item" onclick="cargarVideo(this, 'URL_STREAM_2')">
-                            <h3>Copa Libertadores: Bahia vs Boston River</h3>
-                            <div class="info">19:30</div>
-                            <video controls></video>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="peliculas" class="tab-content">
-                    <div class="submenu">
-                        <div class="submenu-item active" onclick="filtrarContenido('todas-peliculas')">Todas</div>
-                        <div class="submenu-item" onclick="filtrarContenido('accion')">Acción</div>
-                        <div class="submenu-item" onclick="filtrarContenido('comedia')">Comedia</div>
-                        <div class="submenu-item" onclick="filtrarContenido('drama')">Drama</div>
-                        <div class="submenu-item" onclick="filtrarContenido('terror')">Terror</div>
-                    </div>
-                    <div class="contenido-grid">
-                        <div class="item" data-categoria="accion" onclick="cargarVideo(this, 'URL_PELICULA_1')">
-                            <h3>Película de Acción</h3>
-                            <div class="info">2023 • Acción • 2h 10m</div>
-                            <video controls></video>
-                        </div>
-                        <div class="item" data-categoria="drama" onclick="cargarVideo(this, 'URL_PELICULA_2')">
-                            <h3>Película de Drama</h3>
-                            <div class="info">2024 • Drama • 1h 55m</div>
-                            <video controls></video>
-                        </div>
-                        <div class="item" data-categoria="comedia" onclick="cargarVideo(this, 'URL_PELICULA_3')">
-                            <h3>Película de Comedia</h3>
-                            <div class="info">2024 • Comedia • 1h 45m</div>
-                            <video controls></video>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="series" class="tab-content">
-                    <div class="submenu">
-                        <div class="submenu-item active" onclick="filtrarContenido('todas-series')">Todas</div>
-                        <div class="submenu-item" onclick="filtrarContenido('drama-series')">Drama</div>
-                        <div class="submenu-item" onclick="filtrarContenido('comedia-series')">Comedia</div>
-                        <div class="submenu-item" onclick="filtrarContenido('terror-series')">Terror</div>
-                    </div>
-                    <div class="contenido-grid">
-                        <div class="item" data-categoria="drama-series" onclick="mostrarEpisodios('Serie Drama', 2)">
-                            <h3>Serie de Drama</h3>
-                            <div class="info">2023 • 2 Temporadas</div>
-                        </div>
-                        <div class="item" data-categoria="comedia-series" onclick="mostrarEpisodios('Serie Comedia', 3)">
-                            <h3>Serie de Comedia</h3>
-                            <div class="info">2022 • 3 Temporadas</div>
-                        </div>
-                        <div class="item" data-categoria="terror-series" onclick="mostrarEpisodios('Serie Terror', 1)">
-                            <h3>Serie de Terror</h3>
-                            <div class="info">2024 • 1 Temporada</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="animes" class="tab-content">
-                    <div class="submenu">
-                        <div class="submenu-item active" onclick="filtrarContenido('todos-animes')">Todos</div>
-                        <div class="submenu-item" onclick="filtrarContenido('shonen')">Shonen</div>
-                        <div class="submenu-item" onclick="filtrarContenido('seinen')">Seinen</div>
-                        <div class="submenu-item" onclick="filtrarContenido('shojo')">Shojo</div>
-                    </div>
-                    <div class="contenido-grid">
-                        <div class="item" data-categoria="shonen" onclick="mostrarEpisodios('Anime Acción', 1)">
-                            <h3>Anime de Acción</h3>
-                            <div class="info">2023 • 24 Episodios</div>
-                        </div>
-                        <div class="item" data-categoria="seinen" onclick="mostrarEpisodios('Anime Fantasía', 1)">
-                            <h3>Anime de Fantasía</h3>
-                            <div class="info">2024 • 12 Episodios</div>
-                        </div>
-                        <div class="item" data-categoria="shojo" onclick="mostrarEpisodios('Anime Clásico', 5)">
-                            <h3>Anime Clásico</h3>
-                            <div class="info">2010 • 5 Temporadas</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Banner inferior solo para móviles -->
-                <div class="banner mobile-bottom-banner">
-                    <span class="banner-text">BANNER PARA MÓVILES</span>
-                </div>
-            </div>
-            
-            <!-- Banner lateral derecho -->
-            <div class="side-banner">
-                <div class="side-banner-container">
-                    <div class="side-banner-item">
-                        <span class="banner-text">BANNER LATERAL 3</span>
-                    </div>
-                    <div class="side-banner-item">
-                        <span class="banner-text">BANNER LATERAL 4</span>
-                    </div>
-                </div>
-            </div>
+
+        <!-- 📌 Sidebar con Anuncios -->
+        <div class="sidebar">
+            <p>Anuncio (300x600) - Lateral</p>
+            <!-- Anuncio aquí -->
+
+            <p>Anuncio (300x250) - Adicional</p>
+            <!-- Anuncio aquí -->
         </div>
     </div>
-    
-    <!-- Modales -->
-    <div id="episodios-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <h2 id="modal-titulo"></h2>
-            <div id="temporadas-container"></div>
-        </div>
+
+    <!-- 📌 Anuncio al Final del Contenido -->
+    <div class="footer">
+        <p>Anuncio (728x90) - Pie de Página</p>
+        <!-- Anuncio aquí -->
     </div>
-    
-    <!-- Modal de anuncio -->
-    <div id="ad-modal" class="ad-modal">
-        <div class="ad-modal-content">
-            <span class="ad-close" onclick="cerrarAnuncio()">&times;</span>
-            <div class="ad-container">
-                <span class="banner-text">ANUNCIO PUBLICITARIO</span>
-            </div>
-        </div>
+
+    <!-- 📌 Anuncio Sticky (Fijo Abajo) -->
+    <div class="sticky-ad">
+        <p>Anuncio (728x90) - Fijo Abajo</p>
+        <!-- Anuncio aquí -->
     </div>
-    
-    <script>
-        let currentHls = null;
-        let activeItem = null;
-        
-        function openTab(tabId) {
-            // Ocultar todos los tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Desactivar todos los botones
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Activar el tab seleccionado
-            document.getElementById(tabId).classList.add('active');
-            document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`).classList.add('active');
-            
-            // Detener cualquier reproducción
-            if (activeItem) {
-                let video = activeItem.querySelector('video');
-                if (video) {
-                    video.pause();
-                    video.style.display = 'none';
-                }
-                activeItem = null;
-            }
-            
-            if (currentHls) {
-                currentHls.destroy();
-                currentHls = null;
-            }
-        }
-        
-        function filtrarContenido(categoria) {
-            const contenedor = document.querySelector('.tab-content.active .contenido-grid');
-            const items = contenedor.querySelectorAll('.item');
-            const submenuItems = document.querySelectorAll('.tab-content.active .submenu-item');
-            
-            // Actualizar el submenu
-            submenuItems.forEach(item => {
-                item.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-            
-            // Mostrar/ocultar items según la categoría
-            items.forEach(item => {
-                if (categoria.startsWith('todas') || item.dataset.categoria === categoria) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-        
-        function cargarVideo(elemento, url) {
-            // Mostrar anuncio primero
-            mostrarAnuncio();
-            
-            // Almacenar referencia para usarla después de cerrar el anuncio
-            window.elementoSeleccionado = elemento;
-            window.urlSeleccionada = url;
-        }
-        
-        function cargarVideoReal(elemento, url) {
-            // Restablecer video anterior
-            if (activeItem) {
-                let video = activeItem.querySelector('video');
-                video.pause();
-                video.style.display = 'none';
-                if (currentHls) {
-                    currentHls.destroy();
-                    currentHls = null;
-                }
-            }
-            
-            // Activar nuevo elemento
-            activeItem = elemento;
-            const video = elemento.querySelector('video');
-            video.style.display = 'block';
-            
-            // Simulación de carga
-            video.style.backgroundColor = "#000";
-            video.style.height = "150px";
-            
-            console.log(`Cargando video desde: ${url}`);
-        }
-        
-        function mostrarEpisodios(titulo, temporadas) {
-            const modal = document.getElementById('episodios-modal');
-            const modalTitulo = document.getElementById('modal-titulo');
-            const temporadasContainer = document.getElementById('temporadas-container');
-            
-            modalTitulo.textContent = titulo;
-            temporadasContainer.innerHTML = '';
-            
-            // Crear estructura para cada temporada
-            for (let t = 1; t <= temporadas; t++) {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = `
-                    <h3>Temporada ${t}</h3>
-                    <div class="episodios-lista">
-                        ${Array.from({length: 10}, (_, i) => 
-                            `<div class="episodio" onclick="cargarEpisodio('${titulo}', ${t}, ${i+1})">
-                                Episodio ${i+1}
-                            </div>`
-                        ).join('')}
-                    </div>
-                `;
-                temporadasContainer.appendChild(tempDiv);
-            }
-            
-            modal.style.display = 'block';
-        }
-        
-        function cargarEpisodio(serie, temporada, episodio) {
-            cerrarModal();
-            mostrarAnuncio();
-            console.log(`Cargando: ${serie} - Temporada ${temporada}, Episodio ${episodio}`);
-        }
-        
-        function cerrarModal() {
-            document.getElementById('episodios-modal').style.display = 'none';
-        }
-        
-        function mostrarAnuncio() {
-            document.getElementById('ad-modal').style.display = 'block';
-        }
-        
-        function cerrarAnuncio() {
-            document.getElementById('ad-modal').style.display = 'none';
-            
-            // Si hay un video seleccionado pendiente, cargarlo
-            if (window.elementoSeleccionado && window.urlSeleccionada) {
-                cargarVideoReal(window.elementoSeleccionado, window.urlSeleccionada);
-                window.elementoSeleccionado = null;
-                window.urlSeleccionada = null;
-            }
-        }
-    </script>
+
 </body>
 </html>
