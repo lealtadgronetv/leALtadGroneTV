@@ -3,18 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Cuentas</title>
-    <link rel="stylesheet" href="css/styles.css"> <!-- Archivo CSS para estilos -->
+    <title>Streaming Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        header {
+            background-color: #232323;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        h1 {
+            margin: 0;
+            color: #f1c40f;
+        }
+        .tabs {
+            display: flex;
+            background-color: #333;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab-button {
+            background-color: inherit;
+            border: none;
+            cursor: pointer;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            flex-grow: 1;
+        }
+        .tab-button:hover {
+            background-color: #444;
+        }
+        .tab-button.active {
+            background-color: #f1c40f;
+            color: #121212;
+        }
+        .tab-content {
+            display: none;
+            padding: 15px;
+            background-color: #232323;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .contenido-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
+        .item {
+            background-color: #333;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .item:hover {
+            background-color: #444;
+        }
+        .item h3 {
+            margin-top: 0;
+            color: #f1c40f;
+        }
+        .info {
+            color: #999;
+            font-size: 14px;
+        }
+        video {
+            width: 100%;
+            display: none;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .submenu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        .submenu-item {
+            padding: 5px 10px;
+            background-color: #444;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .submenu-item:hover, .submenu-item.active {
+            background-color: #f1c40f;
+            color: #121212;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: #232323;
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .episodio {
+            padding: 8px;
+            background-color: #333;
+            margin: 5px 0;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .episodio:hover {
+            background-color: #444;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Gestión de Cuentas</h1>
-        <p>Selecciona una opción:</p>
+        <header>
+            <h1>Streaming Demo</h1>
+        </header>
         
-        <div class="button-container">
-            <a href="pages/soporte.html" class="button">Soporte</a>
-            <a href="pages/ventas.html" class="button">Gestión de Cuentas</a>
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('deportes')">Deportes</button>
+            <button class="tab-button" onclick="openTab('peliculas')">Películas</button>
+            <button class="tab-button" onclick="openTab('series')">Series</button>
+            <button class="tab-button" onclick="openTab('animes')">Animes</button>
+        </div>
+        
+        <div id="deportes" class="tab-content active">
+            <div class="contenido-grid">
+                <div class="item" onclick="cargarVideo(this, 'URL_STREAM_1')">
+                    <h3>Liga Campeones: Cavalier vs Inter Miami</h3>
+                    <div class="info">19:30</div>
+                    <video controls></video>
+                </div>
+                <div class="item" onclick="cargarVideo(this, 'URL_STREAM_2')">
+                    <h3>Copa Libertadores: Bahia vs Boston River</h3>
+                    <div class="info">19:30</div>
+                    <video controls></video>
+                </div>
+            </div>
+        </div>
+        
+        <div id="peliculas" class="tab-content">
+            <div class="submenu">
+                <div class="submenu-item active" onclick="filtrarContenido('todas-peliculas')">Todas</div>
+                <div class="submenu-item" onclick="filtrarContenido('accion')">Acción</div>
+                <div class="submenu-item" onclick="filtrarContenido('comedia')">Comedia</div>
+                <div class="submenu-item" onclick="filtrarContenido('drama')">Drama</div>
+                <div class="submenu-item" onclick="filtrarContenido('terror')">Terror</div>
+            </div>
+            <div class="contenido-grid">
+                <div class="item" data-categoria="accion" onclick="cargarVideo(this, 'URL_PELICULA_1')">
+                    <h3>Película de Acción</h3>
+                    <div class="info">2023 • Acción • 2h 10m</div>
+                    <video controls></video>
+                </div>
+                <div class="item" data-categoria="drama" onclick="cargarVideo(this, 'URL_PELICULA_2')">
+                    <h3>Película de Drama</h3>
+                    <div class="info">2024 • Drama • 1h 55m</div>
+                    <video controls></video>
+                </div>
+                <div class="item" data-categoria="comedia" onclick="cargarVideo(this, 'URL_PELICULA_3')">
+                    <h3>Película de Comedia</h3>
+                    <div class="info">2024 • Comedia • 1h 45m</div>
+                    <video controls></video>
+                </div>
+            </div>
+        </div>
+        
+        <div id="series" class="tab-content">
+            <div class="submenu">
+                <div class="submenu-item active" onclick="filtrarContenido('todas-series')">Todas</div>
+                <div class="submenu-item" onclick="filtrarContenido('drama-series')">Drama</div>
+                <div class="submenu-item" onclick="filtrarContenido('comedia-series')">Comedia</div>
+                <div class="submenu-item" onclick="filtrarContenido('terror-series')">Terror</div>
+            </div>
+            <div class="contenido-grid">
+                <div class="item" data-categoria="drama-series" onclick="mostrarEpisodios('Serie Drama', 2)">
+                    <h3>Serie de Drama</h3>
+                    <div class="info">2023 • 2 Temporadas</div>
+                </div>
+                <div class="item" data-categoria="comedia-series" onclick="mostrarEpisodios('Serie Comedia', 3)">
+                    <h3>Serie de Comedia</h3>
+                    <div class="info">2022 • 3 Temporadas</div>
+                </div>
+                <div class="item" data-categoria="terror-series" onclick="mostrarEpisodios('Serie Terror', 1)">
+                    <h3>Serie de Terror</h3>
+                    <div class="info">2024 • 1 Temporada</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="animes" class="tab-content">
+            <div class="submenu">
+                <div class="submenu-item active" onclick="filtrarContenido('todos-animes')">Todos</div>
+                <div class="submenu-item" onclick="filtrarContenido('shonen')">Shonen</div>
+                <div class="submenu-item" onclick="filtrarContenido('seinen')">Seinen</div>
+                <div class="submenu-item" onclick="filtrarContenido('shojo')">Shojo</div>
+            </div>
+            <div class="contenido-grid">
+                <div class="item" data-categoria="shonen" onclick="mostrarEpisodios('Anime Acción', 1)">
+                    <h3>Anime de Acción</h3>
+                    <div class="info">2023 • 24 Episodios</div>
+                </div>
+                <div class="item" data-categoria="seinen" onclick="mostrarEpisodios('Anime Fantasía', 1)">
+                    <h3>Anime de Fantasía</h3>
+                    <div class="info">2024 • 12 Episodios</div>
+                </div>
+                <div class="item" data-categoria="shojo" onclick="mostrarEpisodios('Anime Clásico', 5)">
+                    <h3>Anime Clásico</h3>
+                    <div class="info">2010 • 5 Temporadas</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="episodios-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarModal()">&times;</span>
+                <h2 id="modal-titulo"></h2>
+                <div id="temporadas-container"></div>
+            </div>
         </div>
     </div>
+    
+    <script>
+        let currentHls = null;
+        let activeItem = null;
+        
+        function openTab(tabId) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Desactivar todos los botones
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Activar el tab seleccionado
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`).classList.add('active');
+            
+            // Detener cualquier reproducción
+            if (activeItem) {
+                let video = activeItem.querySelector('video');
+                if (video) {
+                    video.pause();
+                    video.style.display = 'none';
+                }
+                activeItem = null;
+            }
+            
+            if (currentHls) {
+                currentHls.destroy();
+                currentHls = null;
+            }
+        }
+        
+        function filtrarContenido(categoria) {
+            const contenedor = document.querySelector('.tab-content.active .contenido-grid');
+            const items = contenedor.querySelectorAll('.item');
+            const submenuItems = document.querySelectorAll('.tab-content.active .submenu-item');
+            
+            // Actualizar el submenu
+            submenuItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Mostrar/ocultar items según la categoría
+            items.forEach(item => {
+                if (categoria.startsWith('todas') || item.dataset.categoria === categoria) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        function cargarVideo(elemento, url) {
+            // Restablecer video anterior
+            if (activeItem) {
+                let video = activeItem.querySelector('video');
+                video.pause();
+                video.style.display = 'none';
+                if (currentHls) {
+                    currentHls.destroy();
+                    currentHls = null;
+                }
+            }
+            
+            // Activar nuevo elemento
+            activeItem = elemento;
+            const video = elemento.querySelector('video');
+            video.style.display = 'block';
+            
+            // Simulación de carga (en un entorno real cargarías el HLS)
+            // Para demostración, simplemente mostramos el video
+            video.style.backgroundColor = "#000";
+            video.style.height = "150px";
+            
+            // Aquí iría la implementación real de HLS
+            console.log(`Cargando video desde: ${url}`);
+        }
+        
+        function mostrarEpisodios(titulo, temporadas) {
+            const modal = document.getElementById('episodios-modal');
+            const modalTitulo = document.getElementById('modal-titulo');
+            const temporadasContainer = document.getElementById('temporadas-container');
+            
+            modalTitulo.textContent = titulo;
+            temporadasContainer.innerHTML = '';
+            
+            // Crear estructura para cada temporada
+            for (let t = 1; t <= temporadas; t++) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = `
+                    <h3>Temporada ${t}</h3>
+                    <div class="episodios-lista">
+                        ${Array.from({length: 10}, (_, i) => 
+                            `<div class="episodio" onclick="cargarEpisodio('${titulo}', ${t}, ${i+1})">
+                                Episodio ${i+1}
+                            </div>`
+                        ).join('')}
+                    </div>
+                `;
+                temporadasContainer.appendChild(tempDiv);
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        function cargarEpisodio(serie, temporada, episodio) {
+            cerrarModal();
+            alert(`Cargando: ${serie} - Temporada ${temporada}, Episodio ${episodio}`);
+        }
+        
+        function cerrarModal() {
+            document.getElementById('episodios-modal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
