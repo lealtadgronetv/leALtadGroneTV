@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
+            background-color: #000;
             color: white;
             margin: 0;
             padding: 0;
@@ -35,7 +35,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
         .banner-text {
             color: #999;
@@ -47,6 +46,12 @@
         .bottom-banner {
             height: 90px;
             width: 100%;
+        }
+        .mobile-bottom-banner {
+            height: 90px;
+            width: 100%;
+            margin-top: 20px;
+            display: none;
         }
         .side-banner {
             width: 160px;
@@ -65,7 +70,7 @@
             align-items: center;
         }
         header {
-            background-color: #232323;
+            background-color: #111;
             padding: 10px;
             text-align: center;
         }
@@ -75,7 +80,7 @@
         }
         .tabs {
             display: flex;
-            background-color: #333;
+            background-color: #222;
             border-radius: 5px 5px 0 0;
         }
         .tab-button {
@@ -88,16 +93,16 @@
             flex-grow: 1;
         }
         .tab-button:hover {
-            background-color: #444;
+            background-color: #333;
         }
         .tab-button.active {
             background-color: #f1c40f;
-            color: #121212;
+            color: #000;
         }
         .tab-content {
             display: none;
             padding: 15px;
-            background-color: #232323;
+            background-color: #111;
         }
         .tab-content.active {
             display: block;
@@ -108,13 +113,13 @@
             gap: 10px;
         }
         .item {
-            background-color: #333;
+            background-color: #222;
             border-radius: 5px;
             padding: 10px;
             cursor: pointer;
         }
         .item:hover {
-            background-color: #444;
+            background-color: #333;
         }
         .item h3 {
             margin-top: 0;
@@ -138,14 +143,14 @@
         }
         .submenu-item {
             padding: 5px 10px;
-            background-color: #444;
+            background-color: #333;
             border-radius: 5px;
             cursor: pointer;
             white-space: nowrap;
         }
         .submenu-item:hover, .submenu-item.active {
             background-color: #f1c40f;
-            color: #121212;
+            color: #000;
         }
         .modal {
             display: none;
@@ -158,29 +163,22 @@
             z-index: 100;
         }
         .modal-content {
-            background-color: #232323;
+            background-color: #111;
             margin: 10% auto;
             padding: 20px;
             width: 80%;
             max-width: 600px;
             border-radius: 5px;
         }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
         .episodio {
             padding: 8px;
-            background-color: #333;
+            background-color: #222;
             margin: 5px 0;
             border-radius: 3px;
             cursor: pointer;
         }
         .episodio:hover {
-            background-color: #444;
+            background-color: #333;
         }
         .ad-modal {
             display: none;
@@ -193,7 +191,7 @@
             z-index: 200;
         }
         .ad-modal-content {
-            background-color: #232323;
+            background-color: #111;
             margin: 10% auto;
             padding: 20px;
             width: 80%;
@@ -212,17 +210,32 @@
         }
         .ad-container {
             height: 250px;
-            background-color: #444;
+            background-color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
         }
         
         /* Estilos responsivos */
         @media (min-width: 1024px) {
             .side-banner {
                 display: block;
+            }
+            .mobile-bottom-banner {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 1023px) {
+            .mobile-bottom-banner {
+                display: flex;
             }
         }
     </style>
@@ -352,6 +365,11 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Banner inferior solo para móviles -->
+                <div class="banner mobile-bottom-banner">
+                    <span class="banner-text">BANNER PARA MÓVILES</span>
+                </div>
             </div>
             
             <!-- Banner lateral derecho -->
@@ -366,28 +384,28 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Modales -->
-        <div id="episodios-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="cerrarModal()">&times;</span>
-                <h2 id="modal-titulo"></h2>
-                <div id="temporadas-container"></div>
-            </div>
+    </div>
+    
+    <!-- Modales -->
+    <div id="episodios-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2 id="modal-titulo"></h2>
+            <div id="temporadas-container"></div>
         </div>
-        
-        <!-- Modal de anuncio -->
-        <div id="ad-modal" class="ad-modal">
-            <div class="ad-modal-content">
-                <span class="ad-close" onclick="cerrarAnuncio()">&times;</span>
-                <div class="ad-container">
-                    <span class="banner-text">ANUNCIO PUBLICITARIO</span>
-                </div>
+    </div>
+    
+    <!-- Modal de anuncio -->
+    <div id="ad-modal" class="ad-modal">
+        <div class="ad-modal-content">
+            <span class="ad-close" onclick="cerrarAnuncio()">&times;</span>
+            <div class="ad-container">
+                <span class="banner-text">ANUNCIO PUBLICITARIO</span>
             </div>
         </div>
     </div>
     
-   <script>
+    <script>
         let currentHls = null;
         let activeItem = null;
         
@@ -469,12 +487,10 @@
             const video = elemento.querySelector('video');
             video.style.display = 'block';
             
-            // Simulación de carga (en un entorno real cargarías el HLS)
-            // Para demostración, simplemente mostramos el video
+            // Simulación de carga
             video.style.backgroundColor = "#000";
             video.style.height = "150px";
             
-            // Aquí iría la implementación real de HLS
             console.log(`Cargando video desde: ${url}`);
         }
         
@@ -508,7 +524,7 @@
         function cargarEpisodio(serie, temporada, episodio) {
             cerrarModal();
             mostrarAnuncio();
-            alert(`Cargando: ${serie} - Temporada ${temporada}, Episodio ${episodio}`);
+            console.log(`Cargando: ${serie} - Temporada ${temporada}, Episodio ${episodio}`);
         }
         
         function cerrarModal() {
