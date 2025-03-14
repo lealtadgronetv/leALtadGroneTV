@@ -14,15 +14,60 @@
             padding: 0;
         }
         .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+        }
+        .main-content {
+            flex: 1;
+            padding: 10px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 10px;
+        }
+        .banner {
+            background-color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .banner-text {
+            color: #999;
+        }
+        .top-banner {
+            height: 90px;
+            width: 100%;
+        }
+        .bottom-banner {
+            height: 90px;
+            width: 100%;
+        }
+        .side-banner {
+            width: 160px;
+            display: none;
+        }
+        .side-banner-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .side-banner-item {
+            background-color: #333;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         header {
             background-color: #232323;
             padding: 10px;
             text-align: center;
-            margin-bottom: 15px;
         }
         h1 {
             margin: 0;
@@ -137,109 +182,192 @@
         .episodio:hover {
             background-color: #444;
         }
+        .ad-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 200;
+        }
+        .ad-modal-content {
+            background-color: #232323;
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .ad-close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .ad-container {
+            height: 250px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        /* Estilos responsivos */
+        @media (min-width: 1024px) {
+            .side-banner {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Streaming Demo</h1>
-        </header>
-        
-        <div class="tabs">
-            <button class="tab-button active" onclick="openTab('deportes')">Deportes</button>
-            <button class="tab-button" onclick="openTab('peliculas')">Películas</button>
-            <button class="tab-button" onclick="openTab('series')">Series</button>
-            <button class="tab-button" onclick="openTab('animes')">Animes</button>
+        <!-- Banner superior -->
+        <div class="banner top-banner">
+            <span class="banner-text">BANNER PUBLICITARIO SUPERIOR</span>
         </div>
         
-        <div id="deportes" class="tab-content active">
-            <div class="contenido-grid">
-                <div class="item" onclick="cargarVideo(this, 'URL_STREAM_1')">
-                    <h3>Liga Campeones: Cavalier vs Inter Miami</h3>
-                    <div class="info">19:30</div>
-                    <video controls></video>
+        <div class="content-wrapper">
+            <!-- Banner lateral izquierdo -->
+            <div class="side-banner">
+                <div class="side-banner-container">
+                    <div class="side-banner-item">
+                        <span class="banner-text">BANNER LATERAL 1</span>
+                    </div>
+                    <div class="side-banner-item">
+                        <span class="banner-text">BANNER LATERAL 2</span>
+                    </div>
                 </div>
-                <div class="item" onclick="cargarVideo(this, 'URL_STREAM_2')">
-                    <h3>Copa Libertadores: Bahia vs Boston River</h3>
-                    <div class="info">19:30</div>
-                    <video controls></video>
+            </div>
+            
+            <!-- Contenido principal -->
+            <div class="main-content">
+                <header>
+                    <h1>Streaming Demo</h1>
+                </header>
+                
+                <!-- Banner debajo del título -->
+                <div class="banner bottom-banner">
+                    <span class="banner-text">BANNER PUBLICITARIO DEBAJO DEL TÍTULO</span>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-button active" onclick="openTab('deportes')">Deportes</button>
+                    <button class="tab-button" onclick="openTab('peliculas')">Películas</button>
+                    <button class="tab-button" onclick="openTab('series')">Series</button>
+                    <button class="tab-button" onclick="openTab('animes')">Animes</button>
+                </div>
+                
+                <div id="deportes" class="tab-content active">
+                    <div class="contenido-grid">
+                        <div class="item" onclick="cargarVideo(this, 'URL_STREAM_1')">
+                            <h3>Liga Campeones: Cavalier vs Inter Miami</h3>
+                            <div class="info">19:30</div>
+                            <video controls></video>
+                        </div>
+                        <div class="item" onclick="cargarVideo(this, 'URL_STREAM_2')">
+                            <h3>Copa Libertadores: Bahia vs Boston River</h3>
+                            <div class="info">19:30</div>
+                            <video controls></video>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="peliculas" class="tab-content">
+                    <div class="submenu">
+                        <div class="submenu-item active" onclick="filtrarContenido('todas-peliculas')">Todas</div>
+                        <div class="submenu-item" onclick="filtrarContenido('accion')">Acción</div>
+                        <div class="submenu-item" onclick="filtrarContenido('comedia')">Comedia</div>
+                        <div class="submenu-item" onclick="filtrarContenido('drama')">Drama</div>
+                        <div class="submenu-item" onclick="filtrarContenido('terror')">Terror</div>
+                    </div>
+                    <div class="contenido-grid">
+                        <div class="item" data-categoria="accion" onclick="cargarVideo(this, 'URL_PELICULA_1')">
+                            <h3>Película de Acción</h3>
+                            <div class="info">2023 • Acción • 2h 10m</div>
+                            <video controls></video>
+                        </div>
+                        <div class="item" data-categoria="drama" onclick="cargarVideo(this, 'URL_PELICULA_2')">
+                            <h3>Película de Drama</h3>
+                            <div class="info">2024 • Drama • 1h 55m</div>
+                            <video controls></video>
+                        </div>
+                        <div class="item" data-categoria="comedia" onclick="cargarVideo(this, 'URL_PELICULA_3')">
+                            <h3>Película de Comedia</h3>
+                            <div class="info">2024 • Comedia • 1h 45m</div>
+                            <video controls></video>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="series" class="tab-content">
+                    <div class="submenu">
+                        <div class="submenu-item active" onclick="filtrarContenido('todas-series')">Todas</div>
+                        <div class="submenu-item" onclick="filtrarContenido('drama-series')">Drama</div>
+                        <div class="submenu-item" onclick="filtrarContenido('comedia-series')">Comedia</div>
+                        <div class="submenu-item" onclick="filtrarContenido('terror-series')">Terror</div>
+                    </div>
+                    <div class="contenido-grid">
+                        <div class="item" data-categoria="drama-series" onclick="mostrarEpisodios('Serie Drama', 2)">
+                            <h3>Serie de Drama</h3>
+                            <div class="info">2023 • 2 Temporadas</div>
+                        </div>
+                        <div class="item" data-categoria="comedia-series" onclick="mostrarEpisodios('Serie Comedia', 3)">
+                            <h3>Serie de Comedia</h3>
+                            <div class="info">2022 • 3 Temporadas</div>
+                        </div>
+                        <div class="item" data-categoria="terror-series" onclick="mostrarEpisodios('Serie Terror', 1)">
+                            <h3>Serie de Terror</h3>
+                            <div class="info">2024 • 1 Temporada</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="animes" class="tab-content">
+                    <div class="submenu">
+                        <div class="submenu-item active" onclick="filtrarContenido('todos-animes')">Todos</div>
+                        <div class="submenu-item" onclick="filtrarContenido('shonen')">Shonen</div>
+                        <div class="submenu-item" onclick="filtrarContenido('seinen')">Seinen</div>
+                        <div class="submenu-item" onclick="filtrarContenido('shojo')">Shojo</div>
+                    </div>
+                    <div class="contenido-grid">
+                        <div class="item" data-categoria="shonen" onclick="mostrarEpisodios('Anime Acción', 1)">
+                            <h3>Anime de Acción</h3>
+                            <div class="info">2023 • 24 Episodios</div>
+                        </div>
+                        <div class="item" data-categoria="seinen" onclick="mostrarEpisodios('Anime Fantasía', 1)">
+                            <h3>Anime de Fantasía</h3>
+                            <div class="info">2024 • 12 Episodios</div>
+                        </div>
+                        <div class="item" data-categoria="shojo" onclick="mostrarEpisodios('Anime Clásico', 5)">
+                            <h3>Anime Clásico</h3>
+                            <div class="info">2010 • 5 Temporadas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Banner lateral derecho -->
+            <div class="side-banner">
+                <div class="side-banner-container">
+                    <div class="side-banner-item">
+                        <span class="banner-text">BANNER LATERAL 3</span>
+                    </div>
+                    <div class="side-banner-item">
+                        <span class="banner-text">BANNER LATERAL 4</span>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div id="peliculas" class="tab-content">
-            <div class="submenu">
-                <div class="submenu-item active" onclick="filtrarContenido('todas-peliculas')">Todas</div>
-                <div class="submenu-item" onclick="filtrarContenido('accion')">Acción</div>
-                <div class="submenu-item" onclick="filtrarContenido('comedia')">Comedia</div>
-                <div class="submenu-item" onclick="filtrarContenido('drama')">Drama</div>
-                <div class="submenu-item" onclick="filtrarContenido('terror')">Terror</div>
-            </div>
-            <div class="contenido-grid">
-                <div class="item" data-categoria="accion" onclick="cargarVideo(this, 'URL_PELICULA_1')">
-                    <h3>Película de Acción</h3>
-                    <div class="info">2023 • Acción • 2h 10m</div>
-                    <video controls></video>
-                </div>
-                <div class="item" data-categoria="drama" onclick="cargarVideo(this, 'URL_PELICULA_2')">
-                    <h3>Película de Drama</h3>
-                    <div class="info">2024 • Drama • 1h 55m</div>
-                    <video controls></video>
-                </div>
-                <div class="item" data-categoria="comedia" onclick="cargarVideo(this, 'URL_PELICULA_3')">
-                    <h3>Película de Comedia</h3>
-                    <div class="info">2024 • Comedia • 1h 45m</div>
-                    <video controls></video>
-                </div>
-            </div>
-        </div>
-        
-        <div id="series" class="tab-content">
-            <div class="submenu">
-                <div class="submenu-item active" onclick="filtrarContenido('todas-series')">Todas</div>
-                <div class="submenu-item" onclick="filtrarContenido('drama-series')">Drama</div>
-                <div class="submenu-item" onclick="filtrarContenido('comedia-series')">Comedia</div>
-                <div class="submenu-item" onclick="filtrarContenido('terror-series')">Terror</div>
-            </div>
-            <div class="contenido-grid">
-                <div class="item" data-categoria="drama-series" onclick="mostrarEpisodios('Serie Drama', 2)">
-                    <h3>Serie de Drama</h3>
-                    <div class="info">2023 • 2 Temporadas</div>
-                </div>
-                <div class="item" data-categoria="comedia-series" onclick="mostrarEpisodios('Serie Comedia', 3)">
-                    <h3>Serie de Comedia</h3>
-                    <div class="info">2022 • 3 Temporadas</div>
-                </div>
-                <div class="item" data-categoria="terror-series" onclick="mostrarEpisodios('Serie Terror', 1)">
-                    <h3>Serie de Terror</h3>
-                    <div class="info">2024 • 1 Temporada</div>
-                </div>
-            </div>
-        </div>
-        
-        <div id="animes" class="tab-content">
-            <div class="submenu">
-                <div class="submenu-item active" onclick="filtrarContenido('todos-animes')">Todos</div>
-                <div class="submenu-item" onclick="filtrarContenido('shonen')">Shonen</div>
-                <div class="submenu-item" onclick="filtrarContenido('seinen')">Seinen</div>
-                <div class="submenu-item" onclick="filtrarContenido('shojo')">Shojo</div>
-            </div>
-            <div class="contenido-grid">
-                <div class="item" data-categoria="shonen" onclick="mostrarEpisodios('Anime Acción', 1)">
-                    <h3>Anime de Acción</h3>
-                    <div class="info">2023 • 24 Episodios</div>
-                </div>
-                <div class="item" data-categoria="seinen" onclick="mostrarEpisodios('Anime Fantasía', 1)">
-                    <h3>Anime de Fantasía</h3>
-                    <div class="info">2024 • 12 Episodios</div>
-                </div>
-                <div class="item" data-categoria="shojo" onclick="mostrarEpisodios('Anime Clásico', 5)">
-                    <h3>Anime Clásico</h3>
-                    <div class="info">2010 • 5 Temporadas</div>
-                </div>
-            </div>
-        </div>
-        
+        <!-- Modales -->
         <div id="episodios-modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="cerrarModal()">&times;</span>
@@ -247,9 +375,19 @@
                 <div id="temporadas-container"></div>
             </div>
         </div>
+        
+        <!-- Modal de anuncio -->
+        <div id="ad-modal" class="ad-modal">
+            <div class="ad-modal-content">
+                <span class="ad-close" onclick="cerrarAnuncio()">&times;</span>
+                <div class="ad-container">
+                    <span class="banner-text">ANUNCIO PUBLICITARIO</span>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <script>
+   <script>
         let currentHls = null;
         let activeItem = null;
         
@@ -306,6 +444,15 @@
         }
         
         function cargarVideo(elemento, url) {
+            // Mostrar anuncio primero
+            mostrarAnuncio();
+            
+            // Almacenar referencia para usarla después de cerrar el anuncio
+            window.elementoSeleccionado = elemento;
+            window.urlSeleccionada = url;
+        }
+        
+        function cargarVideoReal(elemento, url) {
             // Restablecer video anterior
             if (activeItem) {
                 let video = activeItem.querySelector('video');
@@ -360,11 +507,27 @@
         
         function cargarEpisodio(serie, temporada, episodio) {
             cerrarModal();
+            mostrarAnuncio();
             alert(`Cargando: ${serie} - Temporada ${temporada}, Episodio ${episodio}`);
         }
         
         function cerrarModal() {
             document.getElementById('episodios-modal').style.display = 'none';
+        }
+        
+        function mostrarAnuncio() {
+            document.getElementById('ad-modal').style.display = 'block';
+        }
+        
+        function cerrarAnuncio() {
+            document.getElementById('ad-modal').style.display = 'none';
+            
+            // Si hay un video seleccionado pendiente, cargarlo
+            if (window.elementoSeleccionado && window.urlSeleccionada) {
+                cargarVideoReal(window.elementoSeleccionado, window.urlSeleccionada);
+                window.elementoSeleccionado = null;
+                window.urlSeleccionada = null;
+            }
         }
     </script>
 </body>
