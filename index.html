@@ -41,15 +41,7 @@
             min-height: 100px;
             background-color: rgba(255,255,255,0.05);
             border: 1px dashed #444;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(241, 196, 15, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .ad-container:hover {
-            background-color: rgba(255,255,255,0.08);
-            box-shadow: 0 0 15px rgba(241, 196, 15, 0.2);
+            padding: 5px;
         }
         
         .ad-banner {
@@ -59,11 +51,17 @@
             text-align: center;
         }
         
-        .partidos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
+        .partidos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             margin: 20px 0;
+        }
+        
+        .partido-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .partido {
@@ -94,6 +92,15 @@
             display: none;
             margin-top: 15px;
             border-radius: 5px;
+        }
+        
+        .partido-ad {
+            background-color: rgba(255,255,255,0.05);
+            border: 1px dashed #444;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            min-height: 90px;
         }
         
         footer {
@@ -142,40 +149,41 @@
             min-height: 90px;
         }
         
-        /* Nuevo contenedor para anuncios intercalados */
-        .ad-between {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: rgba(255,255,255,0.03);
-            border-radius: 5px;
-            text-align: center;
-        }
-        
-        /* Etiqueta para anuncios */
-        .ad-label {
-            font-size: 12px;
-            color: #777;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-        
-        /* Botón de próximos partidos */
-        .more-matches {
+        /* Botón de anclaje para ver más */
+        .ver-mas-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             background-color: #f1c40f;
             color: #232323;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 50px;
             cursor: pointer;
-            margin: 15px auto;
-            display: block;
+            z-index: 100;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: all 0.3s;
         }
         
-        .more-matches:hover {
-            background-color: #e0b609;
+        .ver-mas-btn:hover {
+            background-color: #ffdd44;
             transform: scale(1.05);
+        }
+        
+        /* Indicador de contenido adicional */
+        .contenido-indicador {
+            text-align: center;
+            padding: 10px;
+            color: #f1c40f;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: pulsar 2s infinite;
+        }
+        
+        @keyframes pulsar {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
     </style>
 </head>
@@ -187,7 +195,6 @@
         
         <!-- Anuncio Superior (banner) -->
         <div class="ad-container" id="ad-top">
-            <div class="ad-label">Contenido recomendado</div>
             <!-- ANUNCIO BANNER SUPERIOR -->
             <div class="ad-banner">
                 <script type="text/javascript">
@@ -203,45 +210,34 @@
             </div>
         </div>
         
-        <!-- Primera coincidencia con anuncio intercalado -->
-        <div class="partido" onclick="cargarPartido(this, 'https://yxnobgu.fubohd.com/tudnusa/mono.m3u8?token=4ac7b1c79a36c40a87e0487da41e97a0843174f0-e5-1741939437-1741903437')">
-            <h3>Liga Campeones CONCACAF: Cavalier vs Inter Miami</h3>
-            <div class="tiempo">19:30</div>
-            <video controls></video>
-        </div>
-        
         <!-- Anuncio Directo -->
         <div class="ad-direct">
-            <div class="ad-label">Ofertas especiales para fanáticos</div>
             <script type='text/javascript' src='//pl26063313.effectiveratecpm.com/93/61/3d/93613d042ce505fe468e829efbb21520.js'></script>
         </div>
-
-        <!-- Segunda coincidencia -->
-        <div class="partido" onclick="cargarPartido(this, 'https://dg9wzq.fubohd.com/espn/mono.m3u8?token=44165cb4a515a69f2f995ab85d90d09e038c455c-df-1741945731-1741909731')">
-            <h3>Copa Libertadores: Bahia vs Boston River</h3>
-            <div class="tiempo">19:30</div>
-            <video controls></video>
+        
+        <!-- Partidos Container -->
+        <div class="partidos-container" id="partidos-container">
+            <!-- Aquí se cargarán los partidos dinámicamente -->
         </div>
         
-        <!-- Botón para cargar más partidos (activador de anuncios) -->
-        <button class="more-matches" onclick="activarAnunciosPorClick()">Ver más partidos de hoy</button>
+        <!-- Indicador de contenido adicional -->
+        <div class="contenido-indicador">
+            Más partidos y contenido disponible ↓
+        </div>
         
-        <!-- Anuncio Container Central con mejor visibilidad -->
-        <div class="ad-container" style="padding: 15px; margin: 30px auto;">
-            <div class="ad-label">Contenido destacado</div>
+        <!-- Anuncio Container Central -->
+        <div class="ad-container">
             <script async="async" data-cfasync="false" src="//pl26063295.effectiveratecpm.com/2537ae2ea8b16bc9e554273a94dfd098/invoke.js"></script>
             <div id="container-2537ae2ea8b16bc9e554273a94dfd098"></div>
         </div>
         
         <!-- Anuncio Directo (adicional) -->
         <div class="ad-container">
-            <div class="ad-label">Patrocinadores oficiales</div>
             <iframe src="https://www.effectiveratecpm.com/wy4ysndt?key=12c98d265ef2e657283053a557f43edd" width="100%" height="250" frameborder="0" scrolling="no"></iframe>
         </div>
         
         <!-- Anuncio Inferior -->
         <div class="ad-container">
-            <div class="ad-label">Recomendado para ti</div>
             <script type='text/javascript' src='//pl26063307.effectiveratecpm.com/19/09/91/1909913ee893cee324321a2b56c090fa.js'></script>
         </div>
         
@@ -250,31 +246,128 @@
         </footer>
     </div>
     
+    <!-- Botón de anclaje para ver más -->
+    <div class="ver-mas-btn" onclick="verMasContenido()">
+        Ver más partidos ↓
+    </div>
+    
     <script>
         // Variable para mantener la instancia actual de HLS
         let currentHls = null;
         let lastActivePartido = null;
         
+        // Datos de partidos
+        const partidos = [
+            {
+                titulo: "Liga Campeones CONCACAF: Cavalier vs Inter Miami",
+                tiempo: "19:30",
+                url: "https://yxnobgu.fubohd.com/tudnusa/mono.m3u8?token=4ac7b1c79a36c40a87e0487da41e97a0843174f0-e5-1741939437-1741903437"
+            },
+            {
+                titulo: "Copa Libertadores: Bahia vs Boston River",
+                tiempo: "19:30",
+                url: "https://dg9wzq.fubohd.com/espn/mono.m3u8?token=44165cb4a515a69f2f995ab85d90d09e038c455c-df-1741945731-1741909731"
+            },
+            // Puedes agregar más partidos aquí
+        ];
+        
         // Aseguramos que los bloqueadores de anuncios no afecten
         document.addEventListener('DOMContentLoaded', function() {
             cargarTodosLosAnuncios();
             detectarBloqueadorAnuncios();
-            
-            // Efecto para destacar anuncios después de cargar
-            setTimeout(highlightAds, 2000);
+            generarPartidos();
         });
         
-        function highlightAds() {
-            const adContainers = document.querySelectorAll('.ad-container');
-            adContainers.forEach((container, index) => {
-                setTimeout(() => {
-                    container.style.transition = 'all 0.5s ease';
-                    container.style.boxShadow = '0 0 15px rgba(241, 196, 15, 0.3)';
-                    setTimeout(() => {
-                        container.style.boxShadow = '0 0 10px rgba(241, 196, 15, 0.1)';
-                    }, 1000);
-                }, index * 500);
+        function generarPartidos() {
+            const container = document.getElementById('partidos-container');
+            container.innerHTML = '';
+            
+            partidos.forEach((partido, index) => {
+                // Crear wrapper para partido + anuncio
+                const wrapper = document.createElement('div');
+                wrapper.className = 'partido-wrapper';
+                
+                // Crear elemento de partido
+                const partidoElement = document.createElement('div');
+                partidoElement.className = 'partido';
+                partidoElement.innerHTML = `
+                    <h3>${partido.titulo}</h3>
+                    <div class="tiempo">${partido.tiempo}</div>
+                    <video controls></video>
+                `;
+                
+                // Asignar el evento onclick
+                partidoElement.onclick = function() {
+                    cargarPartido(this, partido.url);
+                };
+                
+                // Crear anuncio para este partido
+                const anuncioElement = document.createElement('div');
+                anuncioElement.className = 'partido-ad';
+                anuncioElement.innerHTML = `
+                    <div class="ad-slot-partido" id="ad-partido-${index}">
+                        <!-- Anuncio generado dinámicamente -->
+                    </div>
+                `;
+                
+                // Agregar el partido y el anuncio al wrapper
+                wrapper.appendChild(partidoElement);
+                wrapper.appendChild(anuncioElement);
+                
+                // Agregar el wrapper al contenedor principal
+                container.appendChild(wrapper);
+                
+                // Cargar anuncio en el slot
+                cargarAnuncioPartido(index);
             });
+        }
+        
+        function cargarAnuncioPartido(index) {
+            // Opciones de anuncios rotativas
+            const adOptions = [
+                // Opción 1: Script de effectiveratecpm
+                function(elementId) {
+                    const script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = '//pl26063307.effectiveratecpm.com/19/09/91/1909913ee893cee324321a2b56c090fa.js';
+                    document.getElementById(elementId).appendChild(script);
+                },
+                // Opción 2: Iframe directo
+                function(elementId) {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = "https://www.effectiveratecpm.com/wy4ysndt?key=12c98d265ef2e657283053a557f43edd";
+                    iframe.width = "100%";
+                    iframe.height = "90";
+                    iframe.frameBorder = "0";
+                    iframe.scrolling = "no";
+                    document.getElementById(elementId).appendChild(iframe);
+                },
+                // Opción 3: Anuncio banner highperformanceformat
+                function(elementId) {
+                    const script = document.createElement('script');
+                    script.innerHTML = `
+                        atOptions = {
+                            'key': 'b330ccd204185aee9ef640adccf896d2',
+                            'format': 'iframe',
+                            'height': 90,
+                            'width': 728,
+                            'params': {}
+                        };
+                    `;
+                    document.getElementById(elementId).appendChild(script);
+                    
+                    const adScript = document.createElement('script');
+                    adScript.type = 'text/javascript';
+                    adScript.src = '//www.highperformanceformat.com/b330ccd204185aee9ef640adccf896d2/invoke.js';
+                    document.getElementById(elementId).appendChild(adScript);
+                }
+            ];
+            
+            // Seleccionar una opción de anuncio aleatoria
+            const adOption = adOptions[index % adOptions.length];
+            setTimeout(() => {
+                adOption(`ad-partido-${index}`);
+            }, 500);
         }
         
         function cargarTodosLosAnuncios() {
@@ -310,12 +403,12 @@
                     // Intentar cargar alternativas
                     cargarAnunciosAlternativos();
                 }
-            }, 3000);
+            }, }, 3000);
         }
         
         function cargarAnunciosAlternativos() {
             // Intenta con otra red de anuncios o método alternativo
-            const adContainers = document.querySelectorAll('.ad-container');
+            const adContainers = document.querySelectorAll('.ad-container, .partido-ad');
             
             adContainers.forEach(container => {
                 // Crear un iframe directo como alternativa
@@ -386,29 +479,9 @@
             
             // Desplazarse hasta el partido seleccionado
             elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Destacar un anuncio aleatorio después de reproducir el video
-            setTimeout(destacarAnuncioAleatorio, 5000);
         }
         
-        function destacarAnuncioAleatorio() {
-            const adContainers = document.querySelectorAll('.ad-container');
-            if (adContainers.length > 0) {
-                const randomIndex = Math.floor(Math.random() * adContainers.length);
-                const randomAd = adContainers[randomIndex];
-                
-                // Efecto sutil de destaque
-                randomAd.style.transition = 'all 0.8s ease';
-                randomAd.style.boxShadow = '0 0 20px rgba(241, 196, 15, 0.4)';
-                randomAd.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-                
-                setTimeout(() => {
-                    randomAd.style.boxShadow = '0 0 10px rgba(241, 196, 15, 0.1)';
-                }, 3000);
-            }
-        }
-        
-       function cargarPopunder() {
+        function cargarPopunder() {
             // Método 1: Cargar script de popunder
             try {
                 var script = document.createElement('script');
@@ -429,10 +502,10 @@
                 console.log("Error al cargar iframe popunder");
             }
         }
-
+        
         function activarAnunciosPorClick() {
             // Activar todos los anuncios con un solo clic
-            document.querySelectorAll('.ad-container').forEach(container => {
+            document.querySelectorAll('.ad-container, .partido-ad').forEach(container => {
                 // Forzar carga de anuncios
                 container.style.opacity = '0.99';
                 setTimeout(() => {
@@ -454,63 +527,60 @@
                 scriptAds.type = 'text/javascript';
                 scriptAds.src = '//pl26063313.effectiveratecpm.com/93/61/3d/93613d042ce505fe468e829efbb21520.js';
                 document.body.appendChild(scriptAds);
-                
-                // Mostrar mensaje confirmando más contenido
-                const btnMore = document.querySelector('.more-matches');
-                if (btnMore) {
-                    btnMore.textContent = "Cargando partidos...";
-                    setTimeout(() => {
-                        btnMore.textContent = "✓ Partidos actualizados";
-                        
-                        // Mostrar y destacar un anuncio después de usar el botón
-                        setTimeout(destacarAnuncioAleatorio, 1500);
-                    }, 1000);
-                }
             } catch (e) {
                 console.error("Error al cargar scripts adicionales:", e);
             }
         }
-
-        // Programar relevancia de anuncios según horarios
-        function programarRelevanciaAnuncios() {
-            const ahora = new Date();
-            const hora = ahora.getHours();
-            
-            // Durante horarios de mayor tráfico, hacer más visibles los anuncios
-            if (hora >= 18 && hora <= 23) {
-                document.querySelectorAll('.ad-container').forEach(container => {
-                    container.style.padding = '15px';
-                    container.style.boxShadow = '0 0 15px rgba(241, 196, 15, 0.2)';
-                });
+        
+        // Función para desplazarse a los anuncios inferiores
+        function verMasContenido() {
+            const footerElem = document.querySelector('footer');
+            if (footerElem) {
+                footerElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
-
+        
+        // Agregar nuevo partido a la lista
+        function agregarNuevoPartido(titulo, tiempo, url) {
+            // Añadir a la lista de partidos
+            partidos.push({
+                titulo: titulo,
+                tiempo: tiempo,
+                url: url
+            });
+            
+            // Regenerar la lista de partidos
+            generarPartidos();
+        }
+        
         // Inicializar la página
         window.addEventListener('load', function() {
             cargarTodosLosAnuncios();
-            programarRelevanciaAnuncios();
-            
             // Cargar anuncios después de 3 segundos para evitar bloqueos
             setTimeout(activarAnunciosPorClick, 3000);
             
-            // Rotar visibilidad de anuncios cada 45 segundos para mantener la atención
-            setInterval(rotarVisibilidadAnuncios, 45000);
-        });
-        
-        function rotarVisibilidadAnuncios() {
+            // Observador para detectar cuando los anuncios inferiores están visibles
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Si el anuncio es visible, ocultar el botón "Ver más"
+                        document.querySelector('.ver-mas-btn').style.display = 'none';
+                    } else {
+                        // Si el anuncio no es visible, mostrar el botón
+                        document.querySelector('.ver-mas-btn').style.display = 'block';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            // Observar los anuncios inferiores
             const adContainers = document.querySelectorAll('.ad-container');
-            if (adContainers.length > 0) {
-                const randomIndex = Math.floor(Math.random() * adContainers.length);
-                const targetAd = adContainers[randomIndex];
-                
-                // Efecto muy sutil de destaque
-                targetAd.style.transition = 'all 0.8s ease';
-                targetAd.style.transform = 'scale(1.01)';
-                setTimeout(() => {
-                    targetAd.style.transform = 'scale(1)';
-                }, 2000);
+            const lastAdContainer = adContainers[adContainers.length - 1];
+            if (lastAdContainer) {
+                observer.observe(lastAdContainer);
             }
-        }
+        });
     </script>
 </body>
 </html>
+                       
+                       
