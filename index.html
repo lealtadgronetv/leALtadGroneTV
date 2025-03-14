@@ -3,21 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extractor de enlaces M3U8</title>
+    <title>Generador de Partidos</title>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+        body { font-family: Arial, sans-serif; }
+        textarea, input, button { display: block; margin: 10px 0; width: 100%; }
+        .container { max-width: 600px; margin: auto; }
+        .partido { margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <h2>Extractor de enlaces HLS (M3U8)</
+    <div class="container">
+        <h2>Generador de Partidos</h2>
+        <textarea id="partidosInput" rows="10" placeholder="Pegue la lista de partidos..."></textarea>
+        <button onclick="generarCampos()">Generar Campos de URL</button>
+        <div id="urlInputs"></div>
+        <button onclick="generarCodigoHTML()">Generar Código HTML</button>
+        <h3>Código Generado:</h3>
+        <textarea id="codigoOutput" rows="10" readonly></textarea>
+        <h3>Post para Redes Sociales:</h3>
+        <textarea id="postRedes" rows="6" readonly></textarea>
+    </div>
+
+    <script>
+        function generarCampos() {
+            const partidosTexto = document.getElementById("partidosInput").value.trim();
+            const lineas = partidosTexto.split("\n").filter(line => line.trim() !== "");
+            const partidos = [];
+            
+            for (let i = 0; i < lineas.length; i += 2) {
+                if (lineas[i + 1]) {
+                    partidos.push({ nombre: lineas[i], hora: lineas[i + 1] });
+                }
+            }
+            
+            const urlInputs = document.getElementById("urlInputs");
+            urlInputs.innerHTML = "";
+            
+            partidos.forEach((partido, index) => {
+                const label = document.createElement("label");
+                label.textContent = `URL para: ${partido.nombre} (${partido.hora})`;
+                const input = document.createElement("input");
+                input.type = "text";
+                input.placeholder = "Ingrese la URL M3U8";
+                input.id = `url${index}`;
+                urlInputs.appendChild(label);
+                urlInputs.appendChild(input);
+            });
+        }
+
+        function generarCodigoHTML() {
+            const partidosTexto = document.getElementById("partidosInput").value.trim();
+            const lineas = partidosTexto.split("\n").filter(line => line.trim() !== "");
+            const partidos = [];
+            
+            for (let i = 0; i < lineas.length; i += 2) {
+                if (lineas[i + 1]) {
+                    partidos.push({ nombre: lineas[i], hora: lineas[i + 1] });
+                }
+            }
+            
+            let codigoHTML = "";
+            let postRedes = "Los partidos de hoy, míralos totalmente gratis en https://futbolfree.netlify.app/\n\n";
+            
+            partidos.forEach((partido, index) => {
+                const url = document.getElementById(`url${index}`).value.trim();
+                if (url) {
+                    codigoHTML += `    <div class=\"partido\" onclick=\"cargarPartido(this, '${url}')\">\n`;
+                    codigoHTML += `        <h3>${partido.nombre}</h3>\n`;
+                    codigoHTML += `        <div class=\"tiempo\">${partido.hora}</div>\n`;
+                    codigoHTML += `        <video controls></video>\n`;
+                    codigoHTML += `    </div>\n`;
+                    postRedes += `${partido.nombre} - ${partido.hora}\n`;
+                }
+            });
+            
+            document.getElementById("codigoOutput").value = codigoHTML;
+            document.getElementById("postRedes").value = postRedes;
+        }
+    </script>
+</body>
+</html>
