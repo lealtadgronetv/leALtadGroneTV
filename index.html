@@ -42,6 +42,8 @@
             background-color: rgba(255,255,255,0.05);
             border: 1px dashed #444;
             padding: 5px;
+            position: relative;
+            z-index: 10;
         }
         
         .ad-banner {
@@ -156,13 +158,14 @@
             right: 20px;
             background-color: #f1c40f;
             color: #232323;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 50px;
             cursor: pointer;
             z-index: 100;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             transition: all 0.3s;
+            font-size: 16px;
         }
         
         .ver-mas-btn:hover {
@@ -184,6 +187,126 @@
             0% { opacity: 0.5; }
             50% { opacity: 1; }
             100% { opacity: 0.5; }
+        }
+        
+        /* Estilos para botón mostrar más partidos */
+        .mostrar-mas {
+            background-color: #f1c40f;
+            color: #232323;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            margin: 20px auto;
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mostrar-mas:hover {
+            background-color: #ffdd44;
+            transform: scale(1.05);
+        }
+        
+        /* Anuncios flotantes */
+        .ad-flotante {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            z-index: 90;
+            background: rgba(35, 35, 35, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            padding: 10px;
+            border: 1px solid #444;
+        }
+        
+        .ad-flotante-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #f1c40f;
+            color: #232323;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        /* Ocultar partidos adicionales inicialmente */
+        .oculto {
+            display: none;
+        }
+        
+        /* Panel para añadir partidos */
+        #panel-config {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(35, 35, 35, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            transform: translateX(100%);
+            width: 300px;
+        }
+        
+        #panel-config.visible {
+            transform: translateX(0);
+        }
+        
+        .config-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #f1c40f;
+            color: #232323;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 501;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #f1c40f;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+        }
+        
+        .submit-btn {
+            background-color: #f1c40f;
+            color: #232323;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -220,6 +343,9 @@
             <!-- Aquí se cargarán los partidos dinámicamente -->
         </div>
         
+        <!-- Botón mostrar más partidos -->
+        <button class="mostrar-mas" id="btn-mostrar-mas">Mostrar más partidos</button>
+        
         <!-- Indicador de contenido adicional -->
         <div class="contenido-indicador">
             Más partidos y contenido disponible ↓
@@ -248,27 +374,92 @@
     
     <!-- Botón de anclaje para ver más -->
     <div class="ver-mas-btn" onclick="verMasContenido()">
-        Ver más partidos ↓
+        Ver más partidos y anuncios ↓
+    </div>
+    
+    <!-- Anuncio flotante -->
+    <div class="ad-flotante" id="ad-flotante">
+        <div class="ad-flotante-close" onclick="document.getElementById('ad-flotante').style.display='none'">×</div>
+        <script type="text/javascript">
+            atOptions = {
+                'key': 'b330ccd204185aee9ef640adccf896d2',
+                'format': 'iframe',
+                'height': 250,
+                'width': 300,
+                'params': {}
+            };
+            document.write('<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/b330ccd204185aee9ef640adccf896d2/invoke.js"></scr' + 'ipt>');
+        </script>
+    </div>
+    
+    <!-- Panel para configuración y añadir partidos -->
+    <div class="config-toggle" onclick="toggleConfigPanel()">⚙️</div>
+    <div id="panel-config">
+        <h3>Añadir Partido</h3>
+        <div class="form-group">
+            <label for="titulo">Título del partido:</label>
+            <input type="text" id="titulo" placeholder="Ej: Liga Campeones: Barcelona vs Real Madrid">
+        </div>
+        <div class="form-group">
+            <label for="tiempo">Hora del partido:</label>
+            <input type="text" id="tiempo" placeholder="Ej: 19:30">
+        </div>
+        <div class="form-group">
+            <label for="url">URL del stream (m3u8):</label>
+            <textarea id="url" rows="3" placeholder="https://dg9wzq.fubohd.com/tudnusa/mono.m3u8?token=..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="agregarPartidoDesdePanel()">Añadir Partido</button>
     </div>
     
     <script>
         // Variable para mantener la instancia actual de HLS
         let currentHls = null;
         let lastActivePartido = null;
+        let partidosVisibles = 3; // Número inicial de partidos visibles
         
-        // Datos de partidos
+        // Datos de partidos (ejemplo inicial)
         const partidos = [
             {
                 titulo: "Liga Campeones CONCACAF: Cavalier vs Inter Miami",
                 tiempo: "19:30",
-                url: "https://yxnobgu.fubohd.com/tudnusa/mono.m3u8?token=4ac7b1c79a36c40a87e0487da41e97a0843174f0-e5-1741939437-1741903437"
+                url: "https://dg9wzq.fubohd.com/tudnusa/mono.m3u8?token=b31b8d998f1dda3059af17f38fdb61612b1be81b-4f-1741961461-1741925461"
+            },
+            {
+                titulo: "Copa Libertadores: Bahia vs Boston River",
+                tiempo: "19:30",
+                url: "url: "https://dg9wzq.fubohd.com/tudnusa/mono.m3u8?token=b31b8d998f1dda3059af17f38fdb61612b1be81b-4f-1741961461-1741925461"
             },
             {
                 titulo: "Copa Libertadores: Bahia vs Boston River",
                 tiempo: "19:30",
                 url: "https://dg9wzq.fubohd.com/espn/mono.m3u8?token=44165cb4a515a69f2f995ab85d90d09e038c455c-df-1741945731-1741909731"
             },
-            // Puedes agregar más partidos aquí
+            {
+                titulo: "Copa Libertadores: Peñarol vs The Strongest",
+                tiempo: "21:30",
+                url: "https://dg9wzq.fubohd.com/espn2/mono.m3u8?token=b31b8d998f1dda3059af17f38fdb61612b1be81b-4f-1741961461-1741925461"
+            },
+            {
+                titulo: "Copa Sudamericana: Belgrano vs Internacional",
+                tiempo: "21:30",
+                url: "https://dg9wzq.fubohd.com/espn3/mono.m3u8?token=44165cb4a515a69f2f995ab85d90d09e038c455c-df-1741945731-1741909731"
+            },
+            {
+                titulo: "Liga MX: Monterrey vs Juárez",
+                tiempo: "21:00",
+                url: "https://dg9wzq.fubohd.com/tudn/mono.m3u8?token=b31b8d998f1dda3059af17f38fdb61612b1be81b-4f-1741961461-1741925461"
+            },
+            {
+                titulo: "Amistoso Internacional: México vs Brasil",
+                tiempo: "20:30",
+                url: "https://yxnobgu.fubohd.com/tudnusa/mono.m3u8?token=4ac7b1c79a36c40a87e0487da41e97a0843174f0-e5-1741939437-1741903437"
+            },
+            {
+                titulo: "Premier League: Arsenal vs Newcastle",
+                tiempo: "20:00",
+                url: "https://dg9wzq.fubohd.com/espn/mono.m3u8?token=44165cb4a515a69f2f995ab85d90d09e038c455c-df-1741945731-1741909731"
+            }
+            // Puedes añadir más partidos aquí
         ];
         
         // Aseguramos que los bloqueadores de anuncios no afecten
@@ -276,6 +467,9 @@
             cargarTodosLosAnuncios();
             detectarBloqueadorAnuncios();
             generarPartidos();
+            
+            // Configurar botón "Mostrar más"
+            document.getElementById('btn-mostrar-mas').addEventListener('click', mostrarMasPartidos);
         });
         
         function generarPartidos() {
@@ -286,6 +480,11 @@
                 // Crear wrapper para partido + anuncio
                 const wrapper = document.createElement('div');
                 wrapper.className = 'partido-wrapper';
+                
+                // Añadir clase 'oculto' para los partidos que deberían estar inicialmente ocultos
+                if (index >= partidosVisibles) {
+                    wrapper.classList.add('oculto');
+                }
                 
                 // Crear elemento de partido
                 const partidoElement = document.createElement('div');
@@ -320,6 +519,34 @@
                 // Cargar anuncio en el slot
                 cargarAnuncioPartido(index);
             });
+            
+            // Ocultar el botón "Mostrar más" si no hay más partidos para mostrar
+            if (partidos.length <= partidosVisibles) {
+                document.getElementById('btn-mostrar-mas').style.display = 'none';
+            } else {
+                document.getElementById('btn-mostrar-mas').style.display = 'block';
+            }
+        }
+        
+        function mostrarMasPartidos() {
+            const wrappers = document.querySelectorAll('.partido-wrapper.oculto');
+            let contador = 0;
+            
+            // Mostrar los siguientes 3 partidos (o todos los que queden si son menos de 3)
+            wrappers.forEach(wrapper => {
+                if (contador < 3) {
+                    wrapper.classList.remove('oculto');
+                    contador++;
+                }
+            });
+            
+            // Actualizar partidos visibles
+            partidosVisibles += contador;
+            
+            // Ocultar el botón si ya no hay más partidos para mostrar
+            if (document.querySelectorAll('.partido-wrapper.oculto').length === 0) {
+                document.getElementById('btn-mostrar-mas').style.display = 'none';
+            }
         }
         
         function cargarAnuncioPartido(index) {
@@ -403,7 +630,7 @@
                     // Intentar cargar alternativas
                     cargarAnunciosAlternativos();
                 }
-            }, }, 3000);
+            }, 3000);
         }
         
         function cargarAnunciosAlternativos() {
@@ -532,16 +759,39 @@
             }
         }
         
-        // Función para desplazarse a los anuncios inferiores
+            // Función para desplazarse a los anuncios inferiores
         function verMasContenido() {
+            // Mostrar anuncio flotante si está oculto
+            document.getElementById('ad-flotante').style.display = 'block';
+            
+            // Desplazarse a los anuncios inferiores
             const footerElem = document.querySelector('footer');
             if (footerElem) {
                 footerElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+            
+            // Activar anuncios adicionales
+            activarAnunciosPorClick();
         }
         
-        // Agregar nuevo partido a la lista
-        function agregarNuevoPartido(titulo, tiempo, url) {
+        // Función para mostrar/ocultar panel de configuración
+        function toggleConfigPanel() {
+            const panel = document.getElementById('panel-config');
+            panel.classList.toggle('visible');
+        }
+        
+        // Función para añadir nuevo partido desde el panel
+        function agregarPartidoDesdePanel() {
+            const titulo = document.getElementById('titulo').value.trim();
+            const tiempo = document.getElementById('tiempo').value.trim();
+            const url = document.getElementById('url').value.trim();
+            
+            // Validar campos
+            if (!titulo || !tiempo || !url) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
             // Añadir a la lista de partidos
             partidos.push({
                 titulo: titulo,
@@ -551,13 +801,69 @@
             
             // Regenerar la lista de partidos
             generarPartidos();
+            
+            // Limpiar formulario
+            document.getElementById('titulo').value = '';
+            document.getElementById('tiempo').value = '';
+            document.getElementById('url').value = '';
+            
+            // Notificar al usuario
+            alert('¡Partido añadido correctamente!');
+            
+            // Ocultar panel
+            document.getElementById('panel-config').classList.remove('visible');
+        }
+        
+        // Función para guardar/cargar la lista de partidos en localStorage
+        function guardarPartidos() {
+            localStorage.setItem('partidos-en-vivo', JSON.stringify(partidos));
+        }
+        
+        function cargarPartidosGuardados() {
+            const partidosGuardados = localStorage.getItem('partidos-en-vivo');
+            if (partidosGuardados) {
+                // Asignar los partidos guardados a nuestra variable global
+                const partidosParsed = JSON.parse(partidosGuardados);
+                if (Array.isArray(partidosParsed) && partidosParsed.length > 0) {
+                    // Solo cargar si hay partidos válidos
+                    partidos.length = 0; // Vaciar array actual
+                    partidosParsed.forEach(p => partidos.push(p)); // Añadir partidos guardados
+                }
+            }
+        }
+        
+        // Función para mostrar el anuncio flotante periódicamente
+        function mostrarAnuncioFlotantePeriodico() {
+            setInterval(() => {
+                // Mostrar anuncio flotante por 30 segundos
+                document.getElementById('ad-flotante').style.display = 'block';
+                
+                // Ocultar después de 30 segundos
+                setTimeout(() => {
+                    document.getElementById('ad-flotante').style.display = 'none';
+                }, 30000);
+            }, 150000); // Cada 2.5 minutos
         }
         
         // Inicializar la página
         window.addEventListener('load', function() {
+            // Intentar cargar partidos guardados antes de generar
+            cargarPartidosGuardados();
+            
+            // Generar partidos
+            generarPartidos();
+            
+            // Cargar anuncios
             cargarTodosLosAnuncios();
+            
             // Cargar anuncios después de 3 segundos para evitar bloqueos
             setTimeout(activarAnunciosPorClick, 3000);
+            
+            // Iniciar sistema de anuncios flotantes
+            mostrarAnuncioFlotantePeriodico();
+            
+            // Guardar partidos automáticamente cada 5 minutos
+            setInterval(guardarPartidos, 300000);
             
             // Observador para detectar cuando los anuncios inferiores están visibles
             const observer = new IntersectionObserver((entries) => {
@@ -582,5 +888,3 @@
     </script>
 </body>
 </html>
-                       
-                       
