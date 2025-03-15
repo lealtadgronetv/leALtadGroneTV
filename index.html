@@ -44,7 +44,7 @@
                 label.textContent = `URL para: ${partido.nombre} (${partido.hora})`;
                 const input = document.createElement("input");
                 input.type = "text";
-                input.placeholder = "Ingrese la URL M3U8";
+                input.placeholder = "Ingrese la URL M3U8 o deje en blanco";
                 input.id = `url${index}`;
                 urlInputs.appendChild(label);
                 urlInputs.appendChild(input);
@@ -67,14 +67,18 @@
             
             partidos.forEach((partido, index) => {
                 const url = document.getElementById(`url${index}`).value.trim();
+                codigoHTML += `<div class="partido">\n`;
+                codigoHTML += `    <h3>${partido.nombre}</h3>\n`;
+                codigoHTML += `    <div class="tiempo">${partido.hora}</div>\n`;
+                
                 if (url) {
-                    codigoHTML += `    <div class=\"partido\" onclick=\"cargarPartido(this, '${url}')\">\n`;
-                    codigoHTML += `        <h3>${partido.nombre}</h3>\n`;
-                    codigoHTML += `        <div class=\"tiempo\">${partido.hora}</div>\n`;
-                    codigoHTML += `        <video controls></video>\n`;
-                    codigoHTML += `    </div>\n`;
+                    codigoHTML += `    <video controls onclick="cargarPartido(this, '${url}')"></video>\n`;
                     postRedes += `${partido.nombre} - ${partido.hora}\n`;
+                } else {
+                    codigoHTML += `    <p>El evento aún no empieza</p>\n`;
                 }
+                
+                codigoHTML += `</div>\n`;
             });
             
             document.getElementById("codigoOutput").value = codigoHTML;
